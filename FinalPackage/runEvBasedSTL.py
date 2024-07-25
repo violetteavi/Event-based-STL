@@ -32,6 +32,7 @@ import forwardBuchi
 from datetime import datetime
 import signal
 from geometry_msgs.msg import PoseWithCovarianceStamped, Twist,PoseStamped
+from nav_msgs.msg import Odometry
 import threading
 
 class runSpec:
@@ -63,10 +64,12 @@ class runSpec:
         # Default spec location
         mainDirectory = os.path.dirname(os.path.abspath(__file__))
         self.filenames = []
-        self.filenames.append(os.path.join(mainDirectory, 'Specs','follow_spec.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Specs','EDR_Test_spec.txt'))
+        # self.filenames.append(os.path.join(mainDirectory, 'Specs','follow_spec.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'buchiRef.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'EDR_Test_walls.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', 'openMap.txt'))
-        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'hallwaymap_waypoints.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'EDR_Test_waypoints.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.stretch = 0
@@ -200,6 +203,10 @@ class runSpec:
                                            data.pose.pose.orientation.z, data.pose.pose.orientation.w)
         self.position[2] = quaternion_to_euler(newRot)[2]
         self.position[2] = self.transform_to_pipi((np.pi / 180) * (self.position[2]))[0]
+        
+        #HACK: Visualization crashes without a tracking pose. Set it to the robot pose.
+        self.xR[0] = position[0]
+        self.xR[1] = position[1]
 
         if oldPosition is not None:
             poseDiff = np.sqrt((self.position[0]-oldPosition[0])**2 + (self.position[1] - oldPosition[1])**2 )
@@ -237,14 +244,7 @@ class runSpec:
         print('starting ros listener')
         rospy.init_node('listener', anonymous=True)
 
-        amclLocal = 0
-
-        if amclLocal:
-            rospy.Subscriber("/amcl_pose", PoseWithCovarianceStamped, self.jackalPose, queue_size=1)
-        else:
-            rospy.Subscriber("/mocap_node/jackal/pose", PoseStamped, self.jackalPoseOpti, queue_size=1)
-
-        rospy.Subscriber("/mocap_node/helmet/pose", PoseStamped, self.objectTracking, queue_size=1)
+        rospy.Subscriber("/odom", Odometry, self.jackalPose, queue_size=1)
 
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
