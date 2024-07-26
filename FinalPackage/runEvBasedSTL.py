@@ -73,7 +73,7 @@ class runSpec:
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.stretch = 0
-        self.rosRobot = 0
+        self.rosRobot = 1
         self.trackObs = trackObs
         if simType == 'stretch' and robot is not None:
             self.stretch = 1
@@ -205,8 +205,8 @@ class runSpec:
         self.position[2] = self.transform_to_pipi((np.pi / 180) * (self.position[2]))[0]
         
         #HACK: Visualization crashes without a tracking pose. Set it to the robot pose.
-        self.xR[0] = position[0]
-        self.xR[1] = position[1]
+        #self.xR[0] = position[0]
+        #self.xR[1] = position[1]
 
         if oldPosition is not None:
             poseDiff = np.sqrt((self.position[0]-oldPosition[0])**2 + (self.position[1] - oldPosition[1])**2 )
@@ -836,10 +836,10 @@ def stopRobot(robot):
     robot.push_command()
 
 if __name__ == "__main__":
-    realRobots = 0# Use simulation mode if True
+    realRobots = 1# Use simulation mode if True
     logData = 0 # log data if True
     # simType can be sim, stretch, or ros
-    trackObs = 1 # Switch to decide if there should be dynamic obstacles tracked. Using optitrack right now but can be changed
+    trackObs = 0 # Switch to decide if there should be dynamic obstacles tracked. Using optitrack right now but can be changed
     simType = 'ros'
     robot = initializeRobot(realRobots,simType)
 
