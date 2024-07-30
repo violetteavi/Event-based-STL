@@ -410,7 +410,7 @@ class runSpec:
                         self.x[5] = self.robot.end_of_arm.status['stretch_gripper']['pos_pct']
                         self.xR[0] = self.objectPosition[0]
                         self.xR[1] = self.objectPosition[1]
-                        self.xR[2] = self.objectPosition[2] - self.offsetZ[0]
+                        #self.xR[2] = self.objectPosition[2] - self.offsetZ[0]
                         #depot position
                         self.xR[5] = self.objectPosition2[0]
                         self.xR[6] = self.objectPosition2[1]
@@ -426,7 +426,7 @@ class runSpec:
                         self.x[0] = self.position[0]
                         self.x[1] = self.position[1]
                         self.x[2] = self.position[2]
-                        self.xR[2] = self.position[0]
+                        #self.xR[2] = self.position[0]
                         self.xR[3] = self.position[1]
                         # if np.sqrt[[self.x[0]-self.xR[0]]^2+[self.x[1]-self.xR[1]]^2]<3:
                         #     self.xR[2] = self.x[0]
