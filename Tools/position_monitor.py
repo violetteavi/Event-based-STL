@@ -19,7 +19,8 @@ class Location:
         self.publisher = rospy.Publisher("/position_monitor/" + name, Bool, queue_size=1)
     
     def publish_is_here(self, x, y):
-        is_here = self.is_within_threshold(x, y, self.x, self.y, self.threshold)
+        is_here = self.is_within_threshold(x, self.x, y, self.y, self.threshold)
+        print("Is here!" + self.name + " " + str(is_here))
         self.publisher.publish(is_here)
     
     def is_within_threshold(self, x1, x2, y1, y2, threshold):
@@ -30,6 +31,7 @@ class Location:
 def publish_locations(data):
     x = data.pose.pose.position.x
     y = data.pose.pose.position.y
+    print("Publishing locations.")
     for location in locations:
         location.publish_is_here(x, y)
 

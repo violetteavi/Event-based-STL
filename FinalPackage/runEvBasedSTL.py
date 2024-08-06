@@ -31,7 +31,7 @@ import helperFuncs
 import forwardBuchi
 from datetime import datetime
 import signal
-from geometry_msgs.msg import PoseWithCovarianceStamped, Twist,PoseStamped
+from geometry_msgs.msg import PoseWithCovarianceStamped, Twist, PoseStamped, TransformStamped
 from nav_msgs.msg import Odometry
 import threading
 
@@ -43,7 +43,7 @@ class runSpec:
         # self.sizeU = 5 # size of the control input
 
         self.initialState = '0,0,0' # initial state of the system
-        self.maxV = '0.4,0.4,0.4' #Maximum velocity
+        self.maxV = '0.2,0.2,0.05' #Maximum velocity
         # self.maxV = '0.2,0.2,0.05,0.1,12' #Maximum velocity
 
         # stretch reference values
@@ -197,10 +197,10 @@ class runSpec:
         except:
             oldPosition = None
         self.position = 3*[[]]
-        self.position[0] = data.pose.pose.position.x
-        self.position[1] = data.pose.pose.position.y
-        newRot = (data.pose.pose.orientation.x, data.pose.pose.orientation.y,
-                                           data.pose.pose.orientation.z, data.pose.pose.orientation.w)
+        self.position[0] = data.transform.translation.x
+        self.position[1] = data.transform.translation.y
+        newRot = (data.transform.rotation.x, data.transform.rotation.y,
+                                           data.transform.rotation.z, data.transform.rotation.w)
         self.position[2] = quaternion_to_euler(newRot)[2]
         self.position[2] = self.transform_to_pipi((np.pi / 180) * (self.position[2]))[0]
         
@@ -244,9 +244,9 @@ class runSpec:
         print('starting ros listener')
         rospy.init_node('listener', anonymous=True)
 
-        rospy.Subscriber("/odom", Odometry, self.jackalPose, queue_size=1)
+        rospy.Subscriber("/amcl_pose_frequent", TransformStamped, self.jackalPose, queue_size=1)
 
-        self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+        self.pub = rospy.Publisher('/controller/cmd_vel_mux', Twist, queue_size=10)
 
 
         print('Connected to Jackal Pose')
