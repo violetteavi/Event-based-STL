@@ -246,7 +246,7 @@ class runSpec:
 
         rospy.Subscriber("/amcl_pose_frequent", TransformStamped, self.jackalPose, queue_size=1)
 
-        self.pub = rospy.Publisher('/controller/cmd_vel_mux', Twist, queue_size=10)
+        self.pub = rospy.Publisher('/controller/cmd_vel', Twist, queue_size=10)
 
 
         print('Connected to Jackal Pose')

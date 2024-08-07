@@ -49,11 +49,11 @@ def callback_lidar(data):
     # print("minimum distance is: %f" % min_dist)
     global can_go_forward
     global can_go_backward
-    ignore_threshold = 0.05 # ignore anything closer than this
+    ignore_threshold = 0.2 # ignore anything closer than this
     x_ThreshFront_forward = 0.75
     x_ThreshBack_forward = 0
     x_ThreshFront_backward = 0
-    x_ThreshBack_backward = -0.55
+    x_ThreshBack_backward = -0.75
     y_ThreshLeft  = 0.40
     y_ThreshRight = -0.40
     can_go_forward_temp = True
