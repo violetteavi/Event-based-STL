@@ -1,0 +1,51 @@
+#! /usr/bin/env python
+
+"""
+Filename: nav_target_publisher.py
+Package: ???
+Description: Publish nav data to STL from spec controller.
+"""
+
+
+import rospy 
+from std_msgs.msg import String, Bool
+from geometry_msgs.msg import PoseStamped
+import logging
+
+node_logger = logging.getLogger("node_logger")
+pose_dictionary = {
+    'RM 1': [2.4, -3.2],
+    'RM 2': [2.4, -3.2],
+    'RM 3': [2.4, -3.2],
+    'RM 4': [2.4, -3.2],
+    'supply_room': [1.5, -4.5],
+    'nurse_station': [0.0, 0.0]
+}
+
+
+def destCallback(data):
+    dest = data.data
+    dest_pose = pose_dictionary.get(dest)
+    pose = PoseStamped()
+    pose.pose.position.x = dest_pose[0]
+    pose.pose.position.y = dest_pose[1]
+    pose.pose.orientation.w = 1.0
+    pose.header.frame_id = "map"
+    pose.header.stamp = rospy.Time.now()
+    # tell the robot where to go
+    pub_pose_topic.publish(pose)
+
+def isDeliveryCallback(data):
+    is_delivery = data.data
+    # if the task is a delivery, the robot needs to go to the supply room
+    #if is_delivery:
+    #    pub_supply_room_topic.publish(pose_dictionary.get('supply_room'))
+
+if __name__ == '__main__':
+    # Initialize node
+    rospy.init_node('nav_target_publisher')
+    rate = rospy.Rate(10)
+
+    # Create subscriber to /carter_ltl/nav_dest
+    dest_topic = '/carter_ltl/nav_dest'
+    rospy.Subscriber(dest_topic, String, destCallback)
