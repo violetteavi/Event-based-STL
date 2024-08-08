@@ -181,6 +181,18 @@ class runSpec:
         position = [data.pose.position.x,data.pose.position.z]
         self.xR[0] = position[0]
         self.xR[1] = position[1]
+        
+    def navTargetCallback(self, data):
+        # set the position data
+        position = [data.pose.position.x,data.pose.position.z]
+        self.xR[0] = position[0]
+        self.xR[1] = position[1]
+        # tell the spec to start navigation
+        spec = 0
+        evProps = self.specattr[spec].evProps
+        if hasattr(evProps, 'start_nav'):
+            evProps.start_nav = 1
+            self.specattr[spec].evProps = evProps
 
     def jackalPoseOpti(self,data):
         position = [data.pose.position.x, data.pose.position.z]
@@ -248,7 +260,7 @@ class runSpec:
 
         self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
 
-
+        rospy.Subscriber("/carter_ltl/nav_target", PoseStamped, self.navTargetCallback, queue_size=1)
         print('Connected to Jackal Pose')
         print('Starting Thread')
 
