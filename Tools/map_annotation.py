@@ -23,7 +23,7 @@ class Annotator:
         return cropped_img
         
     def load_walls(self, path):
-        wall_df = pd.read_table(path, sep=' ')
+        wall_df = pd.read_table(path, header=None, sep=' ')
         for index, row in wall_df.iterrows():
             if(not len(row) == 4):
                 print("Bad wall row! " + str(row))
@@ -36,7 +36,7 @@ class Annotator:
             self.walls.append([start_point_ros,end_point_ros])
     
     def load_waypoints(self, path):
-        waypoint_df = pd.read_table(path, sep=' ')
+        waypoint_df = pd.read_table(path, header=None, sep=' ')
         for index, row in waypoint_df.iterrows():
             if(not len(row) == 2):
                 print("Bad waypoint row! " + str(row))
@@ -103,9 +103,9 @@ def annotator_unit_test():
     print("Ros origin is roughly X: " + str(x_orig) + " Y: " + str(y_orig))
 
 
-pgm_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/072924_fah_labspace.pgm"
-waypoint_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/072924_fah_labspace_waypoints.txt"
-wall_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/072924_fah_labspace_walls.txt"
+pgm_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/GED_map1_080124.pgm"
+waypoint_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/GED_map1_080124_waypoints.txt"
+wall_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/GED_map1_080124_walls.txt"
 annotator = Annotator(pgm_path, "")
 annotator.load_walls(wall_path)
 annotator.load_waypoints(waypoint_path)
