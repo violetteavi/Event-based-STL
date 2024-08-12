@@ -8,7 +8,7 @@ def talker():
     pub = rospy.Publisher("/amcl_pose_frequent", TransformStamped, queue_size=1)
     rospy.init_node('talker', anonymous=True)
     listener = tf.TransformListener()
-    rate = rospy.Rate(100)
+    rate = rospy.Rate(200)
     while not rospy.is_shutdown():
         try:
 	        (trans,rot) = listener.lookupTransform('map', 'base_link', rospy.Time(0))

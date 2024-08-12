@@ -13,6 +13,7 @@ class Annotator:
         self.last_left_click = ()
         self.waypoints = []
         self.walls = []
+        self.draw_circle(*self.ros2img_coord(0,0))
 
     def load_img(self, path, resize_factor, top_left_crop):
         img = cv2.imread(path, cv2.IMREAD_UNCHANGED);
@@ -103,9 +104,9 @@ def annotator_unit_test():
     print("Ros origin is roughly X: " + str(x_orig) + " Y: " + str(y_orig))
 
 
-pgm_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/GED_map1_080124.pgm"
-waypoint_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/GED_map1_080124_waypoints.txt"
-wall_path = "/home/david/ed_ws/src/Event-based-STL/ED_Data/GED_map1_080124_walls.txt"
+pgm_path = "/home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/072924_fah_labspace.pgm"
+wall_path = "/home/rhclab/catkin_ws/src/Event-based-STL/FinalPackage/Maps/072924_fah_labspace_walls.txt"
+waypoint_path = "/home/rhclab/catkin_ws/src/Event-based-STL/FinalPackage/Maps/072924_fah_labspace_waypoints.txt"
 annotator = Annotator(pgm_path, "")
 annotator.load_walls(wall_path)
 annotator.load_waypoints(waypoint_path)

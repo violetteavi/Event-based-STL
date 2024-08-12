@@ -50,12 +50,12 @@ def callback_lidar(data):
     global can_go_forward
     global can_go_backward
     ignore_threshold = 0.2 # ignore anything closer than this
-    x_ThreshFront_forward = 0.5
+    x_ThreshFront_forward = 0.4
     x_ThreshBack_forward = 0
     x_ThreshFront_backward = 0
-    x_ThreshBack_backward = -0.5
-    y_ThreshLeft  = 0.40
-    y_ThreshRight = -0.40
+    x_ThreshBack_backward = -0.4
+    y_ThreshLeft  = 0.25
+    y_ThreshRight = -0.25
     can_go_forward_temp = True
     can_go_backward_temp = True
     for i in range(len(data.ranges)):

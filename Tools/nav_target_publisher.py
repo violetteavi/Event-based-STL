@@ -13,19 +13,20 @@ from geometry_msgs.msg import PoseStamped
 import logging
 
 node_logger = logging.getLogger("node_logger")
-pose_dictionary = {
-    'RM 1': [2.4, -3.2],
-    'RM 2': [2.4, -3.2],
-    'RM 3': [2.4, -3.2],
-    'RM 4': [2.4, -3.2],
-    'supply_room': [1.5, -4.5],
+fah_pose_dictionary = {
+    'RM 1': [1.5, -8.5],
+    'RM 2': [1.75, 2.2],
+    'RM 3': [-0.35, -3.14],
+    'RM 4': [0, 0],
+    'supply_room': [-0.8, 2.5],
     'nurse_station': [0.0, 0.0]
 }
 
+pub_pose_topic = rospy.Publisher("/carter_ltl/nav_target", PoseStamped, queue_size=1)
 
 def destCallback(data):
     dest = data.data
-    dest_pose = pose_dictionary.get(dest)
+    dest_pose = fah_pose_dictionary.get(dest)
     pose = PoseStamped()
     pose.pose.position.x = dest_pose[0]
     pose.pose.position.y = dest_pose[1]
@@ -33,6 +34,8 @@ def destCallback(data):
     pose.header.frame_id = "map"
     pose.header.stamp = rospy.Time.now()
     # tell the robot where to go
+    if(data.data == "supply_room"):
+        return
     pub_pose_topic.publish(pose)
 
 def isDeliveryCallback(data):
@@ -49,3 +52,5 @@ if __name__ == '__main__':
     # Create subscriber to /carter_ltl/nav_dest
     dest_topic = '/carter_ltl/nav_dest'
     rospy.Subscriber(dest_topic, String, destCallback)
+    
+    rospy.spin()
