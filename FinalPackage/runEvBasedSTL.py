@@ -43,11 +43,11 @@ class runSpec:
         # self.sizeU = 5 # size of the control input
 
         self.initialState = '0,0,0' # initial state of the system
-        self.maxV = '0.5,0.5,0.1' #Maximum velocity
+        self.maxV = '0.3,0.3,0.3' #Maximum velocity
         # self.maxV = '0.2,0.2,0.05,0.1,12' #Maximum velocity
 
         # stretch reference values
-        self.initialStateRef = '5,-3,0,0' # Initial state of reference objects
+        self.initialStateRef = '0,0,0,0' # Initial state of reference objects
         self.linearControl = 1 # Control affine system (default is True)
         self.running = True # initialize the system to run
         self.logData = logData # Log data flag
@@ -64,12 +64,14 @@ class runSpec:
         # Default spec location
         mainDirectory = os.path.dirname(os.path.abspath(__file__))
         self.filenames = []
-        self.filenames.append(os.path.join(mainDirectory, 'Specs','EDR_Test_spec.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Specs','EDR_nav_spec.txt'))
         # self.filenames.append(os.path.join(mainDirectory, 'Specs','follow_spec.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'buchiRef.txt'))
         #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'EDR_Test_walls.txt'))
-        self.filenames.append(os.path.join(mainDirectory, 'Maps', '072924_fah_labspace_walls.txt'))
-        self.filenames.append(os.path.join(mainDirectory, 'Maps', '072924_fah_labspace_waypoints.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'ged_bside_20240813_walls.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'openMap.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'ged_bside_20240813_waypoints.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'openNodes.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.stretch = 0
@@ -183,15 +185,17 @@ class runSpec:
         self.xR[1] = position[1]
         
     def navTargetCallback(self, data):
+        print("Entering nav target callback")
         # set the position data
-        position = [data.pose.position.x,data.pose.position.z]
+        position = [data.pose.position.x,data.pose.position.y]
         self.xR[0] = position[0]
         self.xR[1] = position[1]
         # tell the spec to start navigation
         spec = 0
         evProps = self.specattr[spec].evProps
-        if hasattr(evProps, 'start_nav'):
-            evProps.start_nav = 1
+        if hasattr(evProps, 'nav_start'):
+            print("Starting navigation.")
+            evProps.nav_start = 1
             self.specattr[spec].evProps = evProps
 
     def jackalPoseOpti(self,data):
@@ -229,7 +233,7 @@ class runSpec:
         except:
             pass
 
-        print('Jackal Pose: x:{}, y:{}, theta:{}'.format(self.position[0],self.position[1],self.position[2]))
+        #print('Jackal Pose: x:{}, y:{}, theta:{}'.format(self.position[0],self.position[1],self.position[2]))
     def transform_to_pipi(self,input_angle):
         revolutions = int((input_angle + np.sign(input_angle) * pi) / (2 * pi))
 

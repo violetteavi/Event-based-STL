@@ -1,8 +1,9 @@
 import rospy
 from geometry_msgs.msg import PoseStamped, TransformStamped
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, String
 
 target_xy = None
+target_name = "supply_room"
 pub = None
 alert_raised = False
 
@@ -13,6 +14,11 @@ def set_target(data):
     alert_raised = False
     
     print("Got a destination")
+
+def set_target_name(data):
+    global target_name
+    target_name = data.data
+    print("Destination name: " + data.data)
     
 def publish_is_here(data):
     global alert_raised
@@ -22,7 +28,7 @@ def publish_is_here(data):
     current_x = data.transform.translation.x
     current_y = data.transform.translation.y
     is_here = is_within_threshold(current_x, current_y, target_xy[0], target_xy[1], threshold)
-    if(is_here and not alert_raised):
+    if(is_here and not alert_raised and not target_name == "supply_room"):
         print("Arrived at destination")
         pub.publish(True)
         alert_raised = True
@@ -35,7 +41,8 @@ def is_within_threshold(x1, y1, x2, y2, threshold):
 def listener():
     rospy.init_node('listener', anonymous=True)
     global pub 
-    pub = rospy.Publisher("carter_ltl/inputs/nav_complete", Bool, queue_size=1)
+    pub = rospy.Publisher("carter_stl/nav_complete", Bool, queue_size=1)
+    rospy.Subscriber("/carter_ltl/nav_dest", String, set_target_name)
     rospy.Subscriber("/carter_ltl/nav_target", PoseStamped, set_target)
     rospy.Subscriber("/amcl_pose_frequent", TransformStamped, publish_is_here)
     rospy.spin()

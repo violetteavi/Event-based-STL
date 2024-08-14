@@ -15,18 +15,29 @@ import logging
 node_logger = logging.getLogger("node_logger")
 fah_pose_dictionary = {
     'RM 1': [1.5, -8.5],
-    'RM 2': [1.75, 2.2],
+    'RM 2': [1.75, 1.5],
     'RM 3': [-0.35, -3.14],
     'RM 4': [0, 0],
     'supply_room': [-0.8, 2.5],
     'nurse_station': [0.0, 0.0]
 }
 
+ged_pose_dictionary = {
+    'RM 1': [0.5, 0.85],
+    'RM 2': [-4.65, 11.9],
+    'RM 3': [0, 0],
+    'RM 4': [0, 0],
+    'supply_room': [2.4, 8.55],
+    'nurse_station': [2.4, 8.55]
+}
+
 pub_pose_topic = rospy.Publisher("/carter_ltl/nav_target", PoseStamped, queue_size=1)
 
 def destCallback(data):
+    #dictionary = fah_pose_dictionary
+    dictionary = ged_pose_dictionary
     dest = data.data
-    dest_pose = fah_pose_dictionary.get(dest)
+    dest_pose = dictionary.get(dest)
     pose = PoseStamped()
     pose.pose.position.x = dest_pose[0]
     pose.pose.position.y = dest_pose[1]
@@ -34,9 +45,8 @@ def destCallback(data):
     pose.header.frame_id = "map"
     pose.header.stamp = rospy.Time.now()
     # tell the robot where to go
-    if(data.data == "supply_room"):
-        return
     pub_pose_topic.publish(pose)
+    print("Navigating to: " + str(data.data))
 
 def isDeliveryCallback(data):
     is_delivery = data.data

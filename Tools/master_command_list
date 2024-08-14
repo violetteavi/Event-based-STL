@@ -1,0 +1,65 @@
+#Running turtlebot
+
+# We never need to touch these, set them off to the side
+ssh turtlebot@turtlebot1
+roscore
+
+rosrun tf static_transform_publisher 0 0 0.2 0 0 0 base_link laser 10
+
+python catkin_ws/src/Event-based-STL/Tools/amcl_pose_repeater.py
+
+python catkin_ws/src/Event-based-STL/Tools/safety_switch_no_bluetooth.py
+
+# These nodes will need to be monitored or restarted. Set them up so they are all visible
+
+ssh turtlebot@turtlebot1
+roslaunch rplidar_ros rplidar_a1.launch
+
+ssh turtlebot@turtlebot1
+roslaunch turtlebot_bringup minimal.launch
+
+roslaunch catkin_ws/src/Event-based-STL/Tools/amcl_with_map_no_turtle.launch map_file:=/home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/ged_bside_20240813.yaml
+# or /home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/GED_081024.yaml
+# or /home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/072924_fah_labspace.yaml
+# or /home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/ged_bside_20240813.yaml
+
+rviz -d ~/catkin_ws/src/Event-based-STL/Tools/mapping.rviz
+# Check that the laser scan transform is OK
+
+python catkin_ws/src/Event-based-STL/Tools/nav_target_publisher.py
+
+python catkin_ws/src/Event-based-STL/Tools/position_monitor.py
+
+ssh turtlebot@turtlebot1
+python synthesis/src/LTL_stack/controller_executor/proposition_nodes/carter_clinician_spec_controller.py 
+
+ssh turtlebot@turtlebot1
+python synthesis/src/LTL_stack/controller_executor/proposition_nodes/carter_interaction_controller.py 
+
+ssh -X turtlebot@turtlebot1
+roslaunch controller_executor carter_ltl_all.launch
+# Click run-executor
+
+conda activate stl_synth
+python catkin_ws/src/Event-based-STL/FinalPackage/runEvBasedSTL.py
+# Click Apply and Execute
+
+roslaunch turtlebot_teleop keyboard_teleop.launch
+
+rosbag record -a -o ged_b_pilot
+
+
+
+
+#Debugging
+rostopic pub --once /carter_ltl/nav_dest std_msgs/String "RM 1"
+
+rostopic pub --once /carter_ltl/nav_target geometry_msgs/PoseStamped "{pose: {position: {x: -1.0, y: 0.0, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
+
+rostopic pub -r 200 /controller/cmd_vel geometry_msgs/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 2.0}}"
+
+#Mapping
+rosrun gmapping slam_gmapping scan:=scan
+rosrun map_server map_saver -f ged_bside_20240813
+conda activate stl_synth
+python catkin_ws/src/Event-based-STL/Tools/map_annotation.py 

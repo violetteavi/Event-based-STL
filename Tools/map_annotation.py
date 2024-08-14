@@ -104,9 +104,9 @@ def annotator_unit_test():
     print("Ros origin is roughly X: " + str(x_orig) + " Y: " + str(y_orig))
 
 
-pgm_path = "/home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/072924_fah_labspace.pgm"
-wall_path = "/home/rhclab/catkin_ws/src/Event-based-STL/FinalPackage/Maps/072924_fah_labspace_walls.txt"
-waypoint_path = "/home/rhclab/catkin_ws/src/Event-based-STL/FinalPackage/Maps/072924_fah_labspace_waypoints.txt"
+pgm_path = "/home/rhclab/catkin_ws/src/Event-based-STL/ED_Data/ged_bside_20240813.pgm"
+wall_path = "/home/rhclab/catkin_ws/src/Event-based-STL/FinalPackage/Maps/ged_bside_20240813_walls.txt"
+waypoint_path = "/home/rhclab/catkin_ws/src/Event-based-STL/FinalPackage/Maps/ged_bside_20240813_waypoints.txt"
 annotator = Annotator(pgm_path, "")
 annotator.load_walls(wall_path)
 annotator.load_waypoints(waypoint_path)
