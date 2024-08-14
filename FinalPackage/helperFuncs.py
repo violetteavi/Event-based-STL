@@ -95,7 +95,7 @@ def feedbackLin(vx, vy, theta, epsilon,maxV):
     return [cmdV,cmdW]
 
 def limitCMDs(fwdVel,angVel,maxV,wheel2Center):
-    maxW = (maxV / wheel2Center)/6
+    maxW = (maxV / wheel2Center)/2
 
     ratioV = abs(fwdVel / maxV)
     ratioW = abs(angVel / maxW)

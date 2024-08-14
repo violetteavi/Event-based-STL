@@ -115,7 +115,7 @@ def getControl(nom,nominals,A,b,maxV,i,bPartialX,sizeU,x,sizeState):
         if np.abs(nomInd[1]) < 0.05:
             nomInd[1]=0
 
-        newNom = helperFuncs.feedbackLin(nomInd[0], nomInd[1], x[2], .11, maxV[0])
+        newNom = helperFuncs.feedbackLin(nomInd[0], nomInd[1], x[2], .1, maxV[0])
         nomInd = newNom
         if newNom[0]!=nomInd[0]:
             print('here')
