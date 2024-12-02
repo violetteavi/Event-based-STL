@@ -64,14 +64,16 @@ class runSpec:
         # Default spec location
         mainDirectory = os.path.dirname(os.path.abspath(__file__))
         self.filenames = []
+        #self.filenames.append(os.path.join(mainDirectory, 'Specs','EDR_Test_spec.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'Specs','EDR_nav_spec.txt'))
-        # self.filenames.append(os.path.join(mainDirectory, 'Specs','follow_spec.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Specs','follow_spec.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'buchiRef.txt'))
-        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'EDR_Test_walls.txt'))
-        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'ged_bside_20240813_walls.txt'))
-        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'openMap.txt'))
-        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'ged_bside_20240813_waypoints.txt'))
-        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'openNodes.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'EDR_Test_walls.txt'))
+        self.filenames.append(os.path.join(mainDirectory, 'Maps', 'EDR_Test_waypoints.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', '072924_fah_labspace_walls.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', '072924_fah_labspace_waypoints.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'rhodesFinal_walls.txt'))
+        #self.filenames.append(os.path.join(mainDirectory, 'Maps', 'rhodesFinal_waypoints.txt'))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.filenames.append(os.path.join(mainDirectory, 'Maps', ''))
         self.stretch = 0
